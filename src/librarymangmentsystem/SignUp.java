@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package librarymangmentsystem;
-
+import java.sql.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author mudy
@@ -14,8 +15,14 @@ public class SignUp extends javax.swing.JFrame {
     /**
      * Creates new form SignUp
      */
+    Connection conn;
+    ResultSet rs;
+    PreparedStatement pst;
     public SignUp() {
+       // Title of frame 
+        super("SignUp");
         initComponents();
+        conn = Javaconnect.ConnecrDb();
     }
 
     /**
@@ -54,6 +61,11 @@ public class SignUp extends javax.swing.JFrame {
         jLabel3.setText("Password:");
 
         jButton1.setText("Create");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Security Question:");
@@ -146,7 +158,30 @@ public class SignUp extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            String sql = "Insert into Account (UserName,Name,Password,Sec_Q,Answer) values (?,?,?,?,?)";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,jTextField1.getText());
+            pst.setString(2,jTextField2.getText());
+            pst.setString(3,jTextField3.getText());
+            //Typecasting for combo box 
+            pst.setString(4,(String) jComboBox1.getSelectedItem());
+            pst.setString(5,jTextField4.getText());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Account Created");
+            rs.close();
+            pst.close();
+        }
+        catch(Exception ex)
+        {JOptionPane.showMessageDialog(null,ex);}
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
