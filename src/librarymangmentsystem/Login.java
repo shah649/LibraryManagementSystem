@@ -8,6 +8,7 @@ package librarymangmentsystem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -53,6 +54,11 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 255, 255), 3, true), "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 24), new java.awt.Color(255, 0, 0))); // NOI18N
 
         jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,6 +205,45 @@ public class Login extends javax.swing.JFrame {
         Forgot ob = new Forgot();
         ob.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String username = jTextField1.getText();
+        String password = jPasswordField1.getText();
+        
+        String sql = "select * from Account where UserName=? and Password=?";
+        try{
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,username);
+            pst.setString(2,password);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                rs.close();
+                pst.close();
+          
+                setVisible(false);
+                Loading ob = new Loading();
+                ob.setVisible(true);
+            }
+            else{JOptionPane.showMessageDialog(null, "Username or Password is wrong");}
+        }
+        catch(Exception ex){
+        JOptionPane.showMessageDialog(null, ex);
+        }
+        
+        finally{
+              try{
+              rs.close();
+              pst.close();
+              }catch(Exception ex){
+              JOptionPane.showMessageDialog(null, ex);
+              }
+
+
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
